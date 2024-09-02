@@ -1,3 +1,4 @@
 # wode_LLMs_practice
- Hands-on LLMs practice
+
+## Week 0 总结 2024.09.11.
 

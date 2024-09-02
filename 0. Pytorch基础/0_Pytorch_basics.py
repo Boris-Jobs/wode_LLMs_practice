@@ -6,7 +6,7 @@ Created on 2024-09-01 12:30:05
 """
 
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 from PIL import Image
 import os
 

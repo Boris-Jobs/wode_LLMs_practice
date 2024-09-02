@@ -14,15 +14,24 @@ if __name__ == '__main__':
     image_path = r'C:\Users\borisσ\Desktop\boris_Inc\_Github\wode_LLMs_practice\hymenoptera_data\train\ants\0013035.jpg'
     image = Image.open(image_path)
 
-    # 1. transforms如何使用?
+    # 首先设置好单个的transforms
     trans_totensor = transforms.ToTensor()
-    trans_normalize = transforms.Normalize([6, 3, 2], [9, 3, 5])
-    transform = transforms.Compose([trans_totensor, trans_normalize])
+    trans_normalize = transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+    trans_resize = transforms.Resize((256, 256))
+    trans_resize2 = transforms.Resize(128)
+    # 随后设置Compose组合各种transforms
+    transform = transforms.Compose([trans_resize, trans_totensor, trans_normalize])
+    transform2 = transforms.Compose([trans_resize2, trans_totensor, trans_normalize])
+
     image_transformed = transform(image)
-    print("The size of original image: ", image.size, "The shape of transformed image: ", image_transformed.shape)
+    image_transformed2 = transform2(image)
+
     # 写入tensorboard中:
     writer = SummaryWriter(log_dir='logs')
-    writer.add_image('image_transformed', image_transformed)
+    image = trans_totensor(image)
+    writer.add_image('image', image, 0)
+    # 下面两条代码体会一下global_step的用法.
+    writer.add_image('image_transformed', image_transformed, 0)
+    writer.add_image('image_transformed', image_transformed2, 1)
     writer.close()
-    print(image_transformed[2][0][0])
     # cmd: tensorboard --logdir=logs
