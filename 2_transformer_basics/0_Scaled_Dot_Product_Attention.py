@@ -45,3 +45,6 @@ def scaled_dot_product_attention(
 ):
     dim_k = query.shape[-1]
     scores = torch.bmm(query, key.transpose(1, 2))
+    if query_mask is not None and key_mask is not None:
+        mask = torch.bmm(query_mask.unsqueeze(-1), key_mask.unsqueeze(1))
+    
