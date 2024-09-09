@@ -152,19 +152,15 @@ class Embeddings(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.token_embeddings = nn.Embedding(config.vocab_size, config.hidden_size)
-        self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
+        self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)  # max_position_embeddings:  512
         self.layer_norm = nn.LayerNorm(config.hidden_size, eps=1e-12)
         self.dropout = nn.Dropout()
 
     def forward(self, input_ids):
-        seq_length = input_ids.size(1)
-        print("seq_len: ", seq_length.shape)
-        position_ids = torch.arange(seq_length, dtype=torch.long).unsqueeze(0)
-        print("position id shape: ", position_ids.shape)
-        token_embeddings = self.token_embeddings(input_ids)
-        print("token_embeddings.shape: ", token_embeddings.shape)
-        position_embeddings = self.position_embeddings(position_ids)
-        print("position_embeddings.shape: ", position_embeddings.shape)
+        seq_length = input_ids.size(1)  # seq_len:  5
+        position_ids = torch.arange(seq_length, dtype=torch.long).unsqueeze(0)  # position id shape:  torch.Size([1, 5])
+        token_embeddings = self.token_embeddings(input_ids)  # token_embeddings.shape:  torch.Size([1, 5, 768])
+        position_embeddings = self.position_embeddings(position_ids)  # position_embeddings.shape:  torch.Size([1, 5, 768])
         embeddings = token_embeddings + position_embeddings
         embeddings = self.layer_norm(embeddings)
         embeddings = self.dropout(embeddings)
