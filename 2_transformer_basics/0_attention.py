@@ -120,6 +120,7 @@ class FeedForward(nn.Module):
         x = self.gelu(x)
         x = self.linear_2(x)
         x = self.dropout(x)
+        return x
 
 feed_forward = FeedForward(config)
 ff_output = feed_forward(atten_outputs)
@@ -137,9 +138,39 @@ class TransformerEncoderLayer(nn.Module):
     def forward(self, x, mask=None):
         hidden_state = self.layer_norm_1(x)
         x = x + self.attention(hidden_state, hidden_state, hidden_state, mask=mask)
+        print(x.type)
         x = x + self.feed_forward(self.layer_norm_2(x))
         return x
 
 encoder_layer = TransformerEncoderLayer(config)
 print(inputs_embeds.shape)
 print(encoder_layer(inputs_embeds).size())
+
+
+# 13. 构建词语和位置同时映射表示:
+class Embeddings(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.token_embeddings = nn.Embedding(config.vocab_size, config.hidden_size)
+        self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
+        self.layer_norm = nn.LayerNorm(config.hidden_size, eps=1e-12)
+        self.dropout = nn.Dropout()
+
+    def forward(self, input_ids):
+        seq_length = input_ids.size(1)
+        print("seq_len: ", seq_length.shape)
+        position_ids = torch.arange(seq_length, dtype=torch.long).unsqueeze(0)
+        print("position id shape: ", position_ids.shape)
+        token_embeddings = self.token_embeddings(input_ids)
+        print("token_embeddings.shape: ", token_embeddings.shape)
+        position_embeddings = self.position_embeddings(position_ids)
+        print("position_embeddings.shape: ", position_embeddings.shape)
+        embeddings = token_embeddings + position_embeddings
+        embeddings = self.layer_norm(embeddings)
+        embeddings = self.dropout(embeddings)
+        return embeddings
+
+embedding_layer = Embeddings(config)
+print(embedding_layer(inputs.input_ids).size())
+
+
