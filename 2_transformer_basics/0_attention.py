@@ -112,8 +112,7 @@ class FeedForward(nn.Module):
         self.linear_2 = nn.Linear(config.intermediate_size, config.hidden_size)
         # intermediate_size = 4 * hidden_size
         self.gelu = nn.GELU()
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        print(self.dropout)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # p=0.1
 
     def forward(self, x):
         x = self.linear_1(x)
@@ -138,7 +137,6 @@ class TransformerEncoderLayer(nn.Module):
     def forward(self, x, mask=None):
         hidden_state = self.layer_norm_1(x)
         x = x + self.attention(hidden_state, hidden_state, hidden_state, mask=mask)
-        print(x.type)
         x = x + self.feed_forward(self.layer_norm_2(x))
         return x
 
@@ -170,3 +168,24 @@ embedding_layer = Embeddings(config)
 print(embedding_layer(inputs.input_ids).size())
 
 
+# 14. 构建完整Transformer Encoder
+class TransformerEncoder(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.embeddings = Embeddings(config)
+        self.layers = nn.ModuleList([TransformerEncoderLayer(config) for _ in range(config.num_hidden_layers)])
+
+    def forward(self, x, mask=None):
+        x = self.embeddings(x)
+        for layer in self.layers:
+            x = layer(x)
+        return x
+
+encoder = TransformerEncoder(config)
+print(encoder(inputs.input_ids).size())
+
+
+# 15. 构建Decoder里面的mask
+seq_len = inputs.input_ids.size(-1)
+mask = torch.tril(torch.ones(seq_len, seq_len)).unsqueeze(0)
+print(mask[0])
