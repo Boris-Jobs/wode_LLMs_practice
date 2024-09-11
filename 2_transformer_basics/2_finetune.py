@@ -1,9 +1,22 @@
 from torch.utils.data import Dataset, DataLoader, IterableDataset
-import json
+import json, random, os, numpy as np
 import torch
 from torch import nn
-from transformers import AutoTokenizer, AutoConfig, AutoModel, BertPreTrainedModel, BertModel
+from transformers import AutoTokenizer, AutoConfig, AutoModel, BertPreTrainedModel, BertModel, AdamW, get_scheduler
 from tqdm.auto import tqdm
+
+def seed_everything(seed=1029):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    # some cudnn methods can be random even after fixing the seed
+    # unless you tell it to be deterministic
+    torch.backends.cudnn.deterministic = True
+
+seed_everything(42)
 
 # 1. 继承Dataset类构造自定义数据集
 class AFQMC(Dataset):
@@ -40,8 +53,9 @@ class IterableAFQMC(IterableDataset):
                 sample = json.loads(line.strip())
                 yield sample
 
-train_data = IterableAFQMC('./afqmc_public/train.json')
-print(next(iter(train_data)))
+
+train_iter_data = IterableAFQMC('./afqmc_public/train.json')
+print(next(iter(train_iter_data)))
 
 
 # 3. 构造Dataloader
@@ -65,7 +79,8 @@ def collate_fun(batch_samples):
     y = torch.tensor(batch_label)
     return X, y
 
-train_dataloader = DataLoader(train_data, batch_size=4, collate_fn=collate_fun)
+train_dataloader = DataLoader(train_data, batch_size=4, shuffle=True, collate_fn=collate_fun)
+valid_dataloader = DataLoader(valid_data, batch_size=4, shuffle=False, collate_fn=collate_fun)
 # ValueError: DataLoader with IterableDataset: expected unspecified shuffle option, but got shuffle=True
 
 batch_X, batch_y = next(iter(train_dataloader))
@@ -124,8 +139,10 @@ print(outputs.shape)
 # 6. 优化模型参数
 def train_loop(dataloader, model, loss_fn, optimizer, lr_scheduler, epoch, total_loss):
     progress_bar = tqdm(range(len(dataloader)))
-    progress_bar.set_description(f'loss: {0:>7f}')
-    finish_step_num = (epoch-1) * len(dataloader)
+    progress_bar.set_description(f'loss: {0:>7f}')  # 数值右对齐, 字符长度为7
+    finish_step_num = (epoch-1) * len(dataloader)  # len(dataloader)返回的是批次信息
+    print("\nlen(dataloader) is: ", len(dataloader))
+    print("len(dataloader.dataset) is: ", len(dataloader.dataset))
 
     model.train()
     for step, (X, y) in enumerate(dataloader, start=1):
@@ -139,4 +156,44 @@ def train_loop(dataloader, model, loss_fn, optimizer, lr_scheduler, epoch, total
         lr_scheduler.step()
 
         total_loss += loss.item()
-        
+        progress_bar.set_description(f'loss: {total_loss/(finish_step_num + step):>7f}')
+        progress_bar.update(1)  # 进度条往前推进一个单位
+    return total_loss
+
+def test_loop(dataloader, model, mode='Test'):
+    assert mode in ['Valid', 'Test']
+    size = len(dataloader.dataset)  # len(dataloader)返回的是批次信息
+    correct = 0
+
+    model.eval()
+    with torch.no_grad():
+        for X, y in dataloader:
+            X, y = X.to(device), y.to(device)
+            pred = model(X)
+            correct += (pred.argmax(1) == y).type(torch.float).sum().item()  # 累加预测正确的样本
+            # (1) a.type(torch.float), (2) a.float()
+    correct /= size
+    print(f"{mode} Accuracy: {(100 * correct):>0.1f}%\n")  # 保留一位小数
+    return correct
+
+
+optimizer = AdamW(model.parameters(), lr=1e-5, no_deprecation_warning=True)  # 学习率从5e-5线性降到0
+epochs = 3
+num_training_steps = epochs * len(train_dataloader)
+lr_scheduler = get_scheduler("linear", optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps)
+print("num_training_steps: ", num_training_steps)
+loss_fn = nn.CrossEntropyLoss()
+
+total_loss = 0.
+best_acc = 0.
+for t in range(epochs):
+    print(f"Epoch {t+1}/{epochs}\n------------------------------------")
+    total_loss = train_loop(train_dataloader, model, loss_fn, optimizer, lr_scheduler, t+1, total_loss)
+    valid_acc = test_loop(valid_dataloader, model, 'Valid')
+    if valid_acc > best_acc:
+        best_acc = valid_acc
+        print('saving new weights...\n')
+        torch.save(model.state_dict(), f'epoch_{t+1}_valid_acc_{(100*valid_acc):0.1f}_model_weights.bin')
+print("Done!")
+
+
