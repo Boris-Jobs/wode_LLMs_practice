@@ -13,8 +13,6 @@ I am recently interested in Multimodal LLMs.
 
 from torch import nn
 import torch
-import torchvision
-from torch.utils.data import DataLoader
 
 
 class WodeNet(nn.Module):

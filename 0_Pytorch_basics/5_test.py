@@ -24,7 +24,7 @@ transform = torchvision.transforms.Compose(
 )
 
 
-datasets = torchvision.datasets.CIFAR10(root="./data", train=True)
+datasets = torchvision.datasets.CIFAR10(root="./data", train=True, transform=transform)
 dataloader = DataLoader(datasets, batch_size=1)
 
 
@@ -58,7 +58,7 @@ num_correct = 0
 total_num = 2500
 for i in range(total_num):
     image, label = datasets[i]
-    image = transform(image).to(torch.device("cuda"))
+    image = image.to(torch.device("cuda"))
 
     image = torch.reshape(image, (1, 3, 32, 32))
     model.eval()
