@@ -16,7 +16,6 @@ def seed_everything(seed=1029):
     # unless you tell it to be deterministic
     torch.backends.cudnn.deterministic = True
 
-seed_everything(42)
 
 # 1. 继承Dataset类构造自定义数据集
 class AFQMC(Dataset):
@@ -37,10 +36,7 @@ class AFQMC(Dataset):
     def __getitem__(self, idx):
         return self.data[idx]
     
-train_data = AFQMC('./afqmc_public/train.json')  # Windows路径里的反斜杠\才需要r'x\x', 或 'xx\\xx'
-valid_data = AFQMC('./afqmc_public/dev.json')
 
-print(train_data[0])
 
 # 2. 数据集非常巨大, 难以一次性加载到内存中, 继承IterableDataset构造
 class IterableAFQMC(IterableDataset):
@@ -54,42 +50,11 @@ class IterableAFQMC(IterableDataset):
                 yield sample
 
 
-train_iter_data = IterableAFQMC('./afqmc_public/train.json')
-print(next(iter(train_iter_data)))
 
 
-# 3. 构造Dataloader
-checkpoint = "bert-base-chinese"
-tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 
-def collate_fun(batch_samples):
-    batch_sentence_1, batch_sentence_2 = [], []
-    batch_label = []
-    for sample in batch_samples:
-        batch_sentence_1.append(sample['sentence1'])
-        batch_sentence_2.append(sample['sentence2'])
-        batch_label.append(int(sample['label']))
-    X = tokenizer(
-        batch_sentence_1, 
-        batch_sentence_2, 
-        padding=True, 
-        truncation=True, 
-        return_tensors='pt'
-    )
-    y = torch.tensor(batch_label)
-    return X, y
+# 3. 初始化Dataloader, 见if __name__ == '__main__':
 
-train_dataloader = DataLoader(train_data, batch_size=4, shuffle=True, collate_fn=collate_fun)
-valid_dataloader = DataLoader(valid_data, batch_size=4, shuffle=False, collate_fn=collate_fun)
-# ValueError: DataLoader with IterableDataset: expected unspecified shuffle option, but got shuffle=True
-
-batch_X, batch_y = next(iter(train_dataloader))
-# [CLS] 是 101, [SEP] 是 102
-# batch_X shape:  {'input_ids': torch.Size([4, 30]), 'token_type_ids': torch.Size([4, 30]), 'attention_mask': torch.Size([4, 30])}
-# batch_y shape:  torch.Size([4])
-
-
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 # 4. 构建BERT模型
@@ -108,8 +73,6 @@ class BertForPairwiseCLS(nn.Module):
         logits = self.classifier(cls_vectors)
         return logits
     
-model = BertForPairwiseCLS().to(device)
-# print(model)
 
 
 # 5. 用BertPreTrainedModel来初始化模型
@@ -128,11 +91,6 @@ class BERTForPairwiseCLS(BertPreTrainedModel):
         logits = self.classifier(cls_vectors)
         return logits
     
-config = AutoConfig.from_pretrained(checkpoint)
-model = BERTForPairwiseCLS.from_pretrained(checkpoint, config=config).to(device)
-batch_X = batch_X.to(device)
-outputs = model(batch_X)
-print(outputs.shape)
 
 
 
@@ -177,23 +135,86 @@ def test_loop(dataloader, model, mode='Test'):
     return correct
 
 
-optimizer = AdamW(model.parameters(), lr=1e-5, no_deprecation_warning=True)  # 学习率从5e-5线性降到0
-epochs = 3
-num_training_steps = epochs * len(train_dataloader)
-lr_scheduler = get_scheduler("linear", optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps)
-print("num_training_steps: ", num_training_steps)
-loss_fn = nn.CrossEntropyLoss()
-
-total_loss = 0.
-best_acc = 0.
-for t in range(epochs):
-    print(f"Epoch {t+1}/{epochs}\n------------------------------------")
-    total_loss = train_loop(train_dataloader, model, loss_fn, optimizer, lr_scheduler, t+1, total_loss)
-    valid_acc = test_loop(valid_dataloader, model, 'Valid')
-    if valid_acc > best_acc:
-        best_acc = valid_acc
-        print('saving new weights...\n')
-        torch.save(model.state_dict(), f'epoch_{t+1}_valid_acc_{(100*valid_acc):0.1f}_model_weights.bin')
-print("Done!")
 
 
+
+if __name__ == '__main__':
+
+
+    # 0. 设置全局随机种子
+    seed_everything(42)
+
+
+    # 1. 初始化数据集
+    train_data = AFQMC('./afqmc_public/train.json')  # Windows路径里的反斜杠\才需要r'x\x', 或 'xx\\xx'
+    valid_data = AFQMC('./afqmc_public/dev.json')
+    print(train_data[0])
+
+
+    # 2. 初始化Iterable数据集
+    train_iter_data = IterableAFQMC('./afqmc_public/train.json')
+    print(next(iter(train_iter_data)))
+
+
+    # 3. 构造Dataloader, 并完成分词与输入数据处理
+    checkpoint = "bert-base-chinese"
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+    def collate_fun(batch_samples):
+        batch_sentence_1, batch_sentence_2 = [], []
+        batch_label = []
+        for sample in batch_samples:
+            batch_sentence_1.append(sample['sentence1'])
+            batch_sentence_2.append(sample['sentence2'])
+            batch_label.append(int(sample['label']))
+        X = tokenizer(
+            batch_sentence_1, 
+            batch_sentence_2, 
+            padding=True, 
+            truncation=True, 
+            return_tensors='pt'
+        )
+        y = torch.tensor(batch_label)
+        return X, y
+
+    train_dataloader = DataLoader(train_data, batch_size=4, shuffle=True, collate_fn=collate_fun)
+    valid_dataloader = DataLoader(valid_data, batch_size=4, shuffle=False, collate_fn=collate_fun)
+    # ValueError: DataLoader with IterableDataset: expected unspecified shuffle option, but got shuffle=True
+    # 以上错误: Iterable数据集不需要shuffle选项
+
+    batch_X, batch_y = next(iter(train_dataloader))
+    # [CLS] 是 101, [SEP] 是 102
+    # batch_X shape:  {'input_ids': torch.Size([4, 30]), 'token_type_ids': torch.Size([4, 30]), 'attention_mask': torch.Size([4, 30])}
+    # batch_y shape:  torch.Size([4])
+
+
+    # 4. 利用BertPreTrainedModel类构造模型
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    config = AutoConfig.from_pretrained(checkpoint)
+    model = BERTForPairwiseCLS.from_pretrained(checkpoint, config=config).to(device)
+    batch_X = batch_X.to(device)
+    outputs = model(batch_X)
+    print(outputs.shape)
+
+
+    # 5. 构造训练需要的optimizer, epochs, 总共训练次数, 学习率调度器, 损失函数
+    optimizer = AdamW(model.parameters(), lr=1e-5, no_deprecation_warning=True)  # 学习率从5e-5线性降到0
+    epochs = 3
+    num_training_steps = epochs * len(train_dataloader)  # 用于学习率调度器
+    lr_scheduler = get_scheduler("linear", optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps)
+    print("num_training_steps: ", num_training_steps)
+    loss_fn = nn.CrossEntropyLoss()
+
+    total_loss = 0.
+    best_acc = 0.
+    for t in range(epochs):
+        print(f"Epoch {t+1}/{epochs}\n------------------------------------")
+        # 6. 开始训练与验证
+        total_loss = train_loop(train_dataloader, model, loss_fn, optimizer, lr_scheduler, t+1, total_loss)
+        valid_acc = test_loop(valid_dataloader, model, 'Valid')
+        if valid_acc > best_acc:
+            best_acc = valid_acc
+            print('saving new weights...\n')
+            torch.save(model.state_dict(), f'epoch_{t+1}_valid_acc_{(100*valid_acc):0.1f}_model_weights.bin')
+    print("Done!")
