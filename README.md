@@ -168,34 +168,24 @@ https://arxiv.org/pdf/1908.05620
 
 (16) 一句话总结ELMo: predict next token (LSTM)
 
+(17) 一句话总结Electra: (由小的BERT来生成替代[MASK]的词汇作为干扰模型的输入)
 
-MASS, BART来做seq2seq任务
+(18) 其他模型: MASS, BART来做seq2seq任务, UniLM, Transfer Text-to-Text Transformer (T5), Colossal Clean Crawled Corpus (C4)
 
-UniLM
+![](./pics/UniLM.png)
 
-![](../pics/UniLM.png)
-
-
-Electra (由小的BERT来生成替代[MASK]的词汇作为干扰模型的输入)
-
-sentence level embedding
-
-MLM+NSP+SOP = BERT Task
-
-Transfer Text-to-Text Transformer (T5)
-
-Colossal Clean Crawled Corpus (C4)
+(19) Bert任务: MLM+NSP+SOP
 
 
 ## Language Models are Few-Shot Learners (GPT-3)
 
-想做的事情: Zero-Shot Learning
+**GPT-3最想做的事情: Zero-Shot Learning**
 
-few-shot learning: task description + examples + prompt
+三种x-shot学习区分:
 
-one-shot learning: task description + example + prompt
-
-zero-shot learning: task description + prompt
+(1) few-shot learning: task description + examples + prompt  
+(2) one-shot learning: task description + example + prompt  
+(3) zero-shot learning: task description + prompt  
 
 In-Context Learning (不同于few-shot learning, 不Fine-Tune, 不做参数更新)
 
