@@ -31,7 +31,7 @@ class MyDataset(Dataset):
 
 if __name__ == "__main__":
     # 读取数据集Dataset
-    train_root_dir = r"C:\Users\borisσ\Desktop\boris_Inc\_Github\wode_LLMs_practice\hymenoptera_data\train"
+    train_root_dir = r"..\data\hymenoptera_data\train"
     ants_label_dir = "ants"
     bees_label_dir = "bees"
     ants_dataset = MyDataset(train_root_dir, ants_label_dir)

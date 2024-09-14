@@ -146,13 +146,13 @@ if __name__ == '__main__':
 
 
     # 1. 初始化数据集
-    train_data = AFQMC('./afqmc_public/train.json')  # Windows路径里的反斜杠\才需要r'x\x', 或 'xx\\xx'
-    valid_data = AFQMC('./afqmc_public/dev.json')
+    train_data = AFQMC('../data/afqmc_public/train.json')  # Windows路径里的反斜杠\才需要r'x\x', 或 'xx\\xx'
+    valid_data = AFQMC('../data/afqmc_public/dev.json')
     print(train_data[0])
 
 
     # 2. 初始化Iterable数据集
-    train_iter_data = IterableAFQMC('./afqmc_public/train.json')
+    train_iter_data = IterableAFQMC('../data/afqmc_public/train.json')
     print(next(iter(train_iter_data)))
 
 

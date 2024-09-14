@@ -11,7 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 if __name__ == "__main__":
-    image_path = r"C:\Users\borisσ\Desktop\boris_Inc\_Github\wode_LLMs_practice\hymenoptera_data\train\ants\0013035.jpg"
+    image_path = r"..\data\hymenoptera_data\train\ants\0013035.jpg"
     image = Image.open(image_path)
 
     # 首先设置好单个的transforms
