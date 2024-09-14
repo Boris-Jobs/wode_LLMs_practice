@@ -19,7 +19,7 @@ from torch.nn import Sequential, Conv2d, MaxPool2d, Flatten, Linear
 from torch.utils.data import DataLoader
 
 dataset = torchvision.datasets.CIFAR10(
-    "./data", train=False, transform=torchvision.transforms.ToTensor(), download=True
+    "../data", train=False, transform=torchvision.transforms.ToTensor(), download=True
 )
 
 dataloader = DataLoader(dataset, batch_size=64, shuffle=False)
