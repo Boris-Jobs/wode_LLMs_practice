@@ -9,6 +9,7 @@ import torch.nn.functional as F
 model_ckpt = "bert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
 
+
 # 2. 用tokenizer来进行分词
 text = "Go big or go home."
 inputs = tokenizer(text, return_tensors="pt", add_special_tokens=False)
