@@ -1,3 +1,4 @@
 0. Pytorch基础\data
 data/cifar-10-python.tar.gz
 2_transformer_basics/epoch_3_valid_acc_73.9_model_weights.bin
+3_Bert_classification/bert-base-chinese/pytorch_model.bin
