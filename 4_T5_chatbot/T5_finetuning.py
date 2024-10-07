@@ -3,7 +3,7 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration, Trainer, Train
 from datasets import load_dataset
 
 # 加载数据集
-dataset = load_dataset('json', data_files='../data/QA_T5/train.json', cache_dir='./new_cache_dir')
+dataset = load_dataset('json', data_files='../data/IDAT/train.json', cache_dir='./new_cache_dir')
 
 # 加载预训练模型和tokenizer
 model_name = "google-t5/t5-base"
@@ -12,7 +12,7 @@ model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 # 数据预处理
 def preprocess_function(examples):
-    inputs = [f"问题: {q} 上下文: {c}" for q, c in zip(examples['question'], examples['context'])]
+    inputs = [f"问题: {q}" for q in examples['question']]
     targets = examples['answer']
     model_inputs = tokenizer(inputs, max_length=512, truncation=True, padding="max_length")
     labels = tokenizer(targets, max_length=128, truncation=True, padding="max_length").input_ids
@@ -31,7 +31,6 @@ print(f"预处理后的样本数: {len(tokenized_datasets['train'])}")
 # 设置训练参数
 training_args = TrainingArguments(
     output_dir="./results",
-    evaluation_strategy="epoch",
     learning_rate=2e-5,
     per_device_train_batch_size=4,
     num_train_epochs=3,
@@ -51,14 +50,20 @@ print(f"训练数据集样本数: {len(trainer.train_dataset)}")
 trainer.train()
 
 # 预测函数
-def generate_answer(context, question):
-    input_text = f"问题: {question} 上下文: {context}"
-    input_ids = tokenizer(input_text, return_tensors="pt").input_ids
-    outputs = model.generate(input_ids)
+def generate_answer(question):
+    input_text = f"问题: {question}"
+    input_ids = tokenizer.encode(question, return_tensors='pt')
+
+    # 确保 input_ids 和模型在同一设备上
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    input_ids = input_ids.to(device)
+    model.to(device)
+
+    # 设置 max_new_tokens 参数
+    outputs = model.generate(input_ids, max_new_tokens=50)
     answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return answer
 
 # 示例预测
-context = "你的上下文文本"
-question = "你的问题"
-print(generate_answer(context, question))
+question = "课程代号是什么"
+print("答案：", generate_answer(question))
