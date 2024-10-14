@@ -1,0 +1,10 @@
+NOTE: This module uses Singularity. Some commands execute inside the container
+(e.g. python3, pip3).
+
+0it [00:00, ?it/s]190it [00:00, 1899.71it/s]494it [00:00, 2556.90it/s]784it [00:00, 2712.60it/s]1094it [00:00, 2863.22it/s]1381it [00:00, 2623.08it/s]1647it [00:00, 2573.66it/s]1917it [00:00, 2610.45it/s]2180it [00:00, 2608.95it/s]2449it [00:00, 2630.08it/s]2713it [00:01, 2580.58it/s]3023it [00:01, 2732.66it/s]3349it [00:01, 2888.04it/s]3685it [00:01, 3027.58it/s]3996it [00:01, 3050.35it/s]4302it [00:01, 3033.96it/s]4606it [00:01, 2316.69it/s]4864it [00:01, 2306.46it/s]5118it [00:01, 2365.06it/s]5378it [00:02, 2426.88it/s]5666it [00:02, 2547.97it/s]6007it [00:02, 2789.49it/s]6370it [00:02, 3029.79it/s]6680it [00:02, 2910.66it/s]6977it [00:02, 2755.40it/s]7327it [00:02, 2957.73it/s]7664it [00:02, 3072.98it/s]8003it [00:02, 3160.27it/s]8323it [00:03, 3128.32it/s]8639it [00:03, 3132.55it/s]8954it [00:03, 3087.74it/s]9264it [00:03, 3021.46it/s]9568it [00:03, 3019.23it/s]9653it [00:03, 2792.36it/s]
+0it [00:00, ?it/s]173it [00:00, 1724.39it/s]300it [00:00, 2060.73it/s]
+0it [00:00, ?it/s]268it [00:00, 2677.78it/s]582it [00:00, 2949.17it/s]700it [00:00, 2852.77it/s]
+/usr/local/lib64/python3.9/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+/usr/local/lib64/python3.9/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
