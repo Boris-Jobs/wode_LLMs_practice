@@ -7,3 +7,4 @@ data/cifar-10-python.tar.gz
 4_T5_chatbot/results/checkpoint-500/model.safetensors
 *.pt
 *.safetensors
+3_Bert_classification/caruser/saved_dict/bert.ckpt
