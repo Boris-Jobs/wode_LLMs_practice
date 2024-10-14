@@ -1,10 +1,10 @@
-0. Pytorch基础\data
 data/cifar-10-python.tar.gz
 2_transformer_basics/epoch_3_valid_acc_73.9_model_weights.bin
-3_Bert_classification/bert-base-chinese/pytorch_model.bin
+3_Bert_classification/bert_pretrain/pytorch_model.bin
 4_T5_chatbot/results/checkpoint-500/optimizer.pt
 4_T5_chatbot/results/checkpoint-1000/optimizer.pt
 4_T5_chatbot/results/checkpoint-1000/model.safetensors
 4_T5_chatbot/results/checkpoint-500/model.safetensors
 *.pt
 *.safetensors
+3_Bert_classification/caruser/saved_dict/bert.ckpt

@@ -1,0 +1,43 @@
+Loading data...
+Time usage: 0:00:04
+Epoch [1/10]
+Now, the epoch is:  0 and the total batch is:  75
+Iter:     75,  Train Loss:   2.8,  Train Topic Acc: 12.05%,  Train Emo Acc: 69.95%, Train F1 Topic: 11.52%, Train Precision Topic: 26.28%, Train Recall Topic:  7.58%, Train F1 Emo: 29.75%, Train Precision Emo: 44.76%, Train Recall Emo: 34.16%, Val Loss:   5.2,  Val Topic Acc: 50.39%,  Val Emo Acc: 94.14%
+Test F1 Topic: 42.78%, Test Precision Topic: 65.24%, Test Recall Topic: 36.20%, Test Topic Acc: 50.62%, Test F1 Emo: 25.75%, Test Precision Emo: 53.68%, Test Recall Emo: 33.58%, Test Emo Acc: 61.09%
+Epoch [2/10]
+Now, the epoch is:  1 and the total batch is:  75
+Iter:     75,  Train Loss:   2.0,  Train Topic Acc: 60.76%,  Train Emo Acc: 70.92%, Train F1 Topic: 63.94%, Train Precision Topic: 89.75%, Train Recall Topic: 51.62%, Train F1 Emo: 35.85%, Train Precision Emo: 58.02%, Train Recall Emo: 37.50%, Val Loss:   4.0,  Val Topic Acc: 64.84%,  Val Emo Acc: 92.58%
+Test F1 Topic: 78.01%, Test Precision Topic: 94.20%, Test Recall Topic: 67.71%, Test Topic Acc: 72.34%, Test F1 Emo: 26.82%, Test Precision Emo: 70.39%, Test Recall Emo: 34.03%, Test Emo Acc: 61.25%
+Epoch [3/10]
+Now, the epoch is:  2 and the total batch is:  75
+Iter:     75,  Train Loss:   1.5,  Train Topic Acc: 72.59%,  Train Emo Acc: 73.48%, Train F1 Topic: 78.34%, Train Precision Topic: 90.29%, Train Recall Topic: 69.47%, Train F1 Emo: 48.31%, Train Precision Emo: 66.17%, Train Recall Emo: 45.74%, Val Loss:   3.8,  Val Topic Acc: 66.80%,  Val Emo Acc: 91.41%
+Test F1 Topic: 80.80%, Test Precision Topic: 91.72%, Test Recall Topic: 72.97%, Test Topic Acc: 74.22%, Test F1 Emo: 34.80%, Test Precision Emo: 67.36%, Test Recall Emo: 37.91%, Test Emo Acc: 62.97%
+Epoch [4/10]
+Now, the epoch is:  3 and the total batch is:  75
+Iter:     75,  Train Loss:   1.1,  Train Topic Acc: 78.85%,  Train Emo Acc: 78.71%, Train F1 Topic: 84.01%, Train Precision Topic: 92.67%, Train Recall Topic: 76.99%, Train F1 Emo: 63.79%, Train Precision Emo: 75.66%, Train Recall Emo: 58.79%, Val Loss:   3.8,  Val Topic Acc: 68.75%,  Val Emo Acc: 87.89%
+Test F1 Topic: 81.94%, Test Precision Topic: 90.39%, Test Recall Topic: 75.40%, Test Topic Acc: 76.09%, Test F1 Emo: 40.61%, Test Precision Emo: 63.73%, Test Recall Emo: 41.24%, Test Emo Acc: 64.06%
+Epoch [5/10]
+Now, the epoch is:  4 and the total batch is:  75
+Iter:     75,  Train Loss:  0.78,  Train Topic Acc: 83.86%,  Train Emo Acc: 83.90%, Train F1 Topic: 88.16%, Train Precision Topic: 94.80%, Train Recall Topic: 82.52%, Train F1 Emo: 74.37%, Train Precision Emo: 82.19%, Train Recall Emo: 69.63%, Val Loss:   3.7,  Val Topic Acc: 69.14%,  Val Emo Acc: 89.06%
+Test F1 Topic: 83.32%, Test Precision Topic: 90.64%, Test Recall Topic: 77.64%, Test Topic Acc: 77.34%, Test F1 Emo: 44.97%, Test Precision Emo: 70.38%, Test Recall Emo: 43.98%, Test Emo Acc: 65.62%
+Epoch [6/10]
+Now, the epoch is:  5 and the total batch is:  75
+Iter:     75,  Train Loss:   0.7,  Train Topic Acc: 86.70%,  Train Emo Acc: 88.12%, Train F1 Topic: 90.67%, Train Precision Topic: 95.94%, Train Recall Topic: 86.02%, Train F1 Emo: 81.95%, Train Precision Emo: 87.28%, Train Recall Emo: 78.06%, Val Loss:   3.9,  Val Topic Acc: 69.53%,  Val Emo Acc: 81.25%
+Test F1 Topic: 82.67%, Test Precision Topic: 88.60%, Test Recall Topic: 77.84%, Test Topic Acc: 76.56%, Test F1 Emo: 45.62%, Test Precision Emo: 66.44%, Test Recall Emo: 46.47%, Test Emo Acc: 64.06%
+Epoch [7/10]
+Now, the epoch is:  6 and the total batch is:  75
+Iter:     75,  Train Loss:  0.46,  Train Topic Acc: 88.29%,  Train Emo Acc: 91.53%, Train F1 Topic: 92.13%, Train Precision Topic: 96.67%, Train Recall Topic: 88.07%, Train F1 Emo: 87.49%, Train Precision Emo: 91.10%, Train Recall Emo: 84.55%, Val Loss:   4.3,  Val Topic Acc: 64.06%,  Val Emo Acc: 81.25%
+Test F1 Topic: 82.62%, Test Precision Topic: 87.02%, Test Recall Topic: 78.99%, Test Topic Acc: 76.41%, Test F1 Emo: 48.56%, Test Precision Emo: 61.76%, Test Recall Emo: 47.06%, Test Emo Acc: 65.31%
+Epoch [8/10]
+Now, the epoch is:  7 and the total batch is:  75
+Iter:     75,  Train Loss:  0.38,  Train Topic Acc: 90.34%,  Train Emo Acc: 94.34%, Train F1 Topic: 93.65%, Train Precision Topic: 97.36%, Train Recall Topic: 90.26%, Train F1 Emo: 91.84%, Train Precision Emo: 94.30%, Train Recall Emo: 89.68%, Val Loss:   4.6,  Val Topic Acc: 66.41%,  Val Emo Acc: 78.52%
+Test F1 Topic: 82.29%, Test Precision Topic: 87.26%, Test Recall Topic: 78.52%, Test Topic Acc: 75.62%, Test F1 Emo: 49.15%, Test Precision Emo: 56.93%, Test Recall Emo: 47.52%, Test Emo Acc: 63.75%
+Epoch [9/10]
+Now, the epoch is:  8 and the total batch is:  75
+Iter:     75,  Train Loss:  0.27,  Train Topic Acc: 91.87%,  Train Emo Acc: 95.10%, Train F1 Topic: 95.01%, Train Precision Topic: 97.77%, Train Recall Topic: 92.42%, Train F1 Emo: 92.92%, Train Precision Emo: 94.50%, Train Recall Emo: 91.48%, Val Loss:   4.5,  Val Topic Acc: 65.62%,  Val Emo Acc: 79.69%
+Test F1 Topic: 82.94%, Test Precision Topic: 87.02%, Test Recall Topic: 79.68%, Test Topic Acc: 76.56%, Test F1 Emo: 50.24%, Test Precision Emo: 58.27%, Test Recall Emo: 48.40%, Test Emo Acc: 64.69%
+Epoch [10/10]
+Now, the epoch is:  9 and the total batch is:  75
+Iter:     75,  Train Loss:  0.21,  Train Topic Acc: 94.88%,  Train Emo Acc: 95.83%, Train F1 Topic: 96.98%, Train Precision Topic: 98.86%, Train Recall Topic: 95.19%, Train F1 Emo: 94.10%, Train Precision Emo: 95.61%, Train Recall Emo: 92.73%, Val Loss:   4.9,  Val Topic Acc: 66.02%,  Val Emo Acc: 74.22%
+Test F1 Topic: 82.20%, Test Precision Topic: 85.91%, Test Recall Topic: 79.13%, Test Topic Acc: 76.56%, Test F1 Emo: 53.99%, Test Precision Emo: 59.00%, Test Recall Emo: 51.90%, Test Emo Acc: 65.31%
+Plot saved to trainint_metrics.png
