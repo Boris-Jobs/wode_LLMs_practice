@@ -1,0 +1,15 @@
+artifact_uri: file:///scratch/project_2003238/v/wode_LLMs_practice/4_T5/mlruns/0/51d94d9b5691426fa0b1c0bc2ce046af/artifacts
+end_time: 1729143658302
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 51d94d9b5691426fa0b1c0bc2ce046af
+run_name: ./results
+run_uuid: 51d94d9b5691426fa0b1c0bc2ce046af
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1729143657918
+status: 3
+tags: []
+user_id: yuzitong
