@@ -15,9 +15,6 @@
 
 ## 0_Pytorch_basics
 
-视频网址: [https://www.bilibili.com/video/av74281036/](https://www.bilibili.com/video/av74281036/)
-
-__p4-7, p10-13, p15-24, 32__
 
 三个常用命令:
 ```python
@@ -46,20 +43,6 @@ help(torch.cuda.is_available)
 2. 要定义__getitem__方法与__len__方法
 3. 核心: self.img_path = os.listdir(self.path)获取每一个item的名称, 从而展开__getitem__和__len__
 
-**DataLoader类总结:**  
-(from torch.utils.data import DataLoader)
-通常输入dataset, batch_size, shuffle等等
-
-**CIFAR10的引入:**  
-(torchvision.datasets.CIFAR10)
-
-**transforms的引入:**  
-(from torchvision import transforms)  
-
-**nn.Module的引入:**  
-(from torch import nn, class WodeNet(nn.Module))
-Constructor内构建需要的网络子结构, forward()内构建网络的架构
-
 ### 训练与测试过程总结
 加载数据: transform --> datasets --> dataloader
 
@@ -87,9 +70,6 @@ Constructor内构建需要的网络子结构, forward()内构建网络的架构
 
 ## 1_NLP_basics
 
-台大李宏毅视频网址: https://aistudio.baidu.com/education/group/info/2060
-
-学习章节: 8. NLP任务总览; 9 & 10. BERT和它的家族; 11. GPT3
 
 ### NLP任务总览
 
